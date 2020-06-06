@@ -1,0 +1,30 @@
+syntax = "proto3";//版本
+option optimize_for = SPEED;//加快解析
+option java_package = "netty.protobuf.multipleproto";//指定生成包路径
+option java_outer_classname = "MultipleDataInfo";//生成的外部类名，同时也是文件名
+//protobuf使用message管理数据
+//可以是用message管理其他message
+
+message MyMessage{
+  //定义一个枚举类型
+  enum DataType{
+    StudentType = 0;//proto3 要求enum从0开始
+    WorkerType = 1;
+  }
+  //data_type标识枚举类中的哪一个
+  DataType data_type = 1;
+
+  //表示每次枚举类型只能出现其中的一个
+  oneof dataBody{
+      Student student = 2;
+      Worker worker = 3;
+  }
+}
+message Student{//会在上面的外部类中升成Student内部类，是真正发送的内容
+  int32 id = 1;//Student类中有一个属性，名字为id，int32(protobuf类型对应java的int) 1表示属性序号不是值
+  string name = 2;
+}
+message Worker{
+  string name = 1;
+  int32 age = 2;
+}
